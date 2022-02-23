@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+    <!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,%i索引【从数字0开始递增】,,, -->
+    <!-- appender是configuration的子节点，是负责写日志的组件。 -->
+    <!-- ConsoleAppender：把日志输出到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+<!--    &lt;!&ndash; 写入到数据库 &ndash;&gt;-->
+<!--    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">-->
+<!--        <connectionSource class="ch.qos.logback.core.db.DataSourceConnectionSource">-->
+<!--            <dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+<!--                <driverClass>com.mysql.cj.jdbc.Driver</driverClass>-->
+<!--                <jdbcUrl>jdbc:mysql://cdb-phybktho.cd.tencentcdb.com:10054/scms?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=Asia/Shanghai</jdbcUrl>-->
+<!--                <user>root</user> &lt;!&ndash; 数据库用户名 &ndash;&gt;-->
+<!--                <password>ITElites420130</password> &lt;!&ndash; 密码 &ndash;&gt;-->
+<!--            </dataSource>-->
+<!--        </connectionSource>-->
+<!--    </appender>-->
+    
+    <!-- 输出级别和输出配置选择 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+    <!-- 指定项目中某个包，当有日志操作行为时的日志记录级别 -->
+    <!-- com.market.scms为根包，也就是只要是发生在这个根包下面的所有日志操作行为的权限都是DEBUG -->
+    <!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->
+<!--    <logger name="com.market.scms.web.supper" level="INFO">-->
+<!--        <appender-ref ref="syslog_supper" />-->
+<!--    </logger>-->
+<!--    <logger name="com.market.scms.web.all" level="INFO">-->
+<!--        <appender-ref ref="syslog_login" />-->
+<!--    </logger>-->
+</configuration>  
