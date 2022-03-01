@@ -4,7 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author 14396
+ * @Author: Mr_OO
+ * @Date: 2022/2/23 16:17
  */
 @SpringBootApplication
 public class CmsApplication {
