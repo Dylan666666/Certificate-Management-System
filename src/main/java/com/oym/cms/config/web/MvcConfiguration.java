@@ -89,32 +89,10 @@ public class MvcConfiguration implements WebMvcConfigurer, ApplicationContextAwa
     public CommonsMultipartResolver createMultipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding("utf-8");
-        // 1024 * 1024 * 20 = 20M
-        multipartResolver.setMaxUploadSize(20971520);
-        multipartResolver.setMaxInMemorySize(20971520);
+        // 1024 * 1024 * 2 = 2M
+        multipartResolver.setMaxUploadSize(2097152);
+        multipartResolver.setMaxInMemorySize(2097152);
         return multipartResolver;
-    }
-
-    /**
-     * 静态资源配置
-     * @param registry
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String os = System.getProperty("os.name");
-        String basePath = "";
-        String windows = "windows";
-        //加载图片的默认地址前缀
-
-        if(os.toLowerCase().startsWith(windows)) {
-            registry.addResourceHandler("/goods/**")
-                    .addResourceLocations("file:C:/cms/image/certificate/");
-        } else {
-            registry.addResourceHandler("/goods/**")
-                    .addResourceLocations("file:/cms/image/certificate/");
-        }
-
-        WebMvcConfigurer.super.addResourceHandlers(registry);
     }
 
 
