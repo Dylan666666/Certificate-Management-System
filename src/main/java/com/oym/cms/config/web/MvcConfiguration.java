@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.*;
@@ -64,7 +63,7 @@ public class MvcConfiguration implements WebMvcConfigurer, ApplicationContextAwa
                 response.setHeader("Access-Control-Max-Age", "3600");
                 response.setHeader("Access-Control-Allow-Credentials", "true");
                 response.setHeader("Access-Control-Allow-Headers", "Accept, Origin, " +
-                        "X-Requested-With, Content-Type,Last-Modified,device,token,staffToken");
+                        "X-Requested-With, Content-Type,Last-Modified,device,token,userToken");
                 //检测是options方法则直接返回200,用于跳过预检机制
                 if ("OPTIONS".equals(method)) {
                     response.setStatus(HttpStatus.OK.value());
