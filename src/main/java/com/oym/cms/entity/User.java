@@ -23,13 +23,25 @@ public class User implements Serializable {
      */
     private String userName;
     /**
-     * 用户职位
+     * 用户职别
      */
     private Integer userPosition;
     /**
-     * 用户状态属性
+     * 用户账号状态
      */
     private Integer userStatus;
+    /**
+     * token
+     */
+    private Integer userToken;
+
+    public Integer getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(Integer userToken) {
+        this.userToken = userToken;
+    }
 
     public String getUserId() {
         return userId;
@@ -69,5 +81,16 @@ public class User implements Serializable {
 
     public void setUserStatus(Integer userStatus) {
         this.userStatus = userStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", userPassword='" + userPassword + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPosition=" + userPosition +
+                ", userStatus=" + userStatus +
+                '}';
     }
 }
