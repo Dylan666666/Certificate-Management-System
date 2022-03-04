@@ -38,17 +38,12 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        //也就是SimpleAuthenticationInfo构造的时候第一个参数传递需要staff对象
-        User staff = (User) principalCollection.getPrimaryPrincipal();
-
         //取出职工功能表数据
         List<String> urlList = jurisdictionMapper.queryAllUrls();
-
         //授权
         for (String s : urlList) {
             authorizationInfo.addStringPermission(s);
         }
-
         return authorizationInfo;
     }
 

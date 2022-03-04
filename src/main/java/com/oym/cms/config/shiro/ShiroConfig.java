@@ -12,7 +12,6 @@ import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -125,11 +124,8 @@ public class ShiroConfig {
         return mySessionManager;
     }
 
-    private String host = "101.43.139.237:6379";
-    @Value("${redis.port}")
-    private int port;
-    @Value("${redis.timeout}")
-    private int timeout;
+    private static final String HOST = "101.43.139.237:6379";
+    private static final int TIMEOUT = 1800;
 
     /**
      * 配置shiro redisManager, 使用的是shiro-redis开源插件
@@ -138,9 +134,8 @@ public class ShiroConfig {
      */
     private RedisManager redisManager() {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
-        redisManager.setPort(port);
-        redisManager.setTimeout(timeout);
+        redisManager.setHost(HOST);
+        redisManager.setTimeout(TIMEOUT);
         return redisManager;
     }
 

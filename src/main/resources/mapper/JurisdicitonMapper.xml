@@ -5,8 +5,10 @@
 <mapper namespace="com.oym.cms.mapper.JurisdictionMapper">
     <select id="queryAllUrls" resultType="String">
         SELECT 
-        *
+        url
         FROM 
         jurisdiction
+        WHERE 
+        url_status = 1 
     </select>
 </mapper>

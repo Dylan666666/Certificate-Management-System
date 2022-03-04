@@ -16,6 +16,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
  * @Author: Mr_OO
  * @Date: 2022/3/3 18:13
  */
+@Service
 public class UserServiceImpl implements UserService {
 
     /**
