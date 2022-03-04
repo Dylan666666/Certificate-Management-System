@@ -56,7 +56,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setLoginUrl("/user/login");
 
         // 未授权界面, 对应LoginController中 unauthorized 请求
-        shiroFilterFactoryBean.setUnauthorizedUrl("/user/unauthorized");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/user/login");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

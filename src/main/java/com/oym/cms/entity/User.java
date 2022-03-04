@@ -33,13 +33,13 @@ public class User implements Serializable {
     /**
      * token
      */
-    private Integer userToken;
+    private String userToken;
 
-    public Integer getUserToken() {
+    public String getUserToken() {
         return userToken;
     }
 
-    public void setUserToken(Integer userToken) {
+    public void setUserToken(String userToken) {
         this.userToken = userToken;
     }
 

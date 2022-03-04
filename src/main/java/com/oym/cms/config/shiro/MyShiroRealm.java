@@ -1,6 +1,10 @@
 package com.oym.cms.config.shiro;
 
+import com.oym.cms.dto.UserDTO;
 import com.oym.cms.entity.User;
+import com.oym.cms.enums.DTOMsgEnum;
+import com.oym.cms.mapper.JurisdictionMapper;
+import com.oym.cms.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,15 +24,60 @@ import java.util.*;
  */
 public class MyShiroRealm extends AuthorizingRealm {
 
-    //TODO待开发
-    
+    @Resource
+    private JurisdictionMapper jurisdictionMapper;
+    @Resource
+    private UserService userService;
+
+    /**
+     * 授权
+     *
+     * @param principalCollection
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        //也就是SimpleAuthenticationInfo构造的时候第一个参数传递需要staff对象
+        User staff = (User) principalCollection.getPrimaryPrincipal();
+
+        //取出职工功能表数据
+        List<String> urlList = jurisdictionMapper.queryAllUrls();
+
+        //授权
+        for (String s : urlList) {
+            authorizationInfo.addStringPermission(s);
+        }
+
+        return authorizationInfo;
     }
 
+    /**
+     * 身份认证
+     *
+     * @param token
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        return null;
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+        //获取用户的输入的账号.
+        String userId = (String) token.getPrincipal();
+
+        //通过userId从数据库中查找 User对象.
+        UserDTO userDTO = userService.queryUserById(userId);
+        if (DTOMsgEnum.OK.getStatus() != userDTO.getMsg()) {
+            return null;
+        }
+
+        return new SimpleAuthenticationInfo(
+                //传入对象（一定要是对象！！！getPrimaryPrincipal()要取得）
+                userDTO.getUser(),
+                //传入的是加密后的密码
+                userDTO.getUser().getUserPassword(),
+                //传入salt
+                ByteSource.Util.bytes(userDTO.getUser().getUserId()),
+                getName());
     }
 }

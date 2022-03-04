@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oym.cms.mapper.UserMapper">
+    <select id="queryUserById" resultType="com.oym.cms.entity.User">
+        SELECT 
+        *
+        FROM 
+        tb_staff
+        WHERE 
+        user_id = #{userId}
+    </select>
+</mapper>

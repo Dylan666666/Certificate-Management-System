@@ -15,13 +15,4 @@ public interface UserMapper {
      * @return
      */
     User queryUserById(@Param("userId") String userId);
-
-    /**
-     * 登录
-     *
-     * @param userId
-     * @param userPassword
-     * @return
-     */
-    User userLogin(@Param("userId") String userId, @Param("userPassword") String userPassword);
 }
