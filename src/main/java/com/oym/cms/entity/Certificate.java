@@ -24,7 +24,7 @@ public class Certificate implements Serializable {
     /**
      * 证书类别
      */
-    private Integer certificateCategory;
+    private Integer certificateType;
 
     /**
      * 用户id
@@ -32,21 +32,21 @@ public class Certificate implements Serializable {
     private String userId;
 
     /**
-     * 证书图片（图片字节码）
-     */
-    private String certificateImageStr;
-
-    /**
      * 证书获奖时间
      */
-    private Date awardDate;
+    private Date certificateWinTime;
 
-    public String getCertificateImageStr() {
-        return certificateImageStr;
+    /**
+     * 证书描述
+     */
+    private String certificateDescription;
+
+    public String getCertificateDescription() {
+        return certificateDescription;
     }
 
-    public void setCertificateImageStr(String certificateImageStr) {
-        this.certificateImageStr = certificateImageStr;
+    public void setCertificateDescription(String certificateDescription) {
+        this.certificateDescription = certificateDescription;
     }
 
     public String getCertificateName() {
@@ -65,12 +65,12 @@ public class Certificate implements Serializable {
         this.certificateId = certificateId;
     }
 
-    public Integer getCertificateCategory() {
-        return certificateCategory;
+    public Integer getCertificateType() {
+        return certificateType;
     }
 
-    public void setCertificateCategory(Integer certificateCategory) {
-        this.certificateCategory = certificateCategory;
+    public void setCertificateType(Integer certificateType) {
+        this.certificateType = certificateType;
     }
 
     public String getUserId() {
@@ -81,11 +81,23 @@ public class Certificate implements Serializable {
         this.userId = userId;
     }
 
-    public Date getAwardDate() {
-        return awardDate;
+    public Date getCertificateWinTime() {
+        return certificateWinTime;
     }
 
-    public void setAwardDate(Date awardDate) {
-        this.awardDate = awardDate;
+    public void setCertificateWinTime(Date certificateWinTime) {
+        this.certificateWinTime = certificateWinTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Certificate{" +
+                "certificateName='" + certificateName + '\'' +
+                ", certificateId='" + certificateId + '\'' +
+                ", certificateType=" + certificateType +
+                ", userId='" + userId + '\'' +
+                ", certificateWinTime=" + certificateWinTime +
+                ", certificateDescription='" + certificateDescription + '\'' +
+                '}';
     }
 }
