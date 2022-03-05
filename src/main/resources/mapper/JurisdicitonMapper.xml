@@ -7,7 +7,7 @@
         SELECT 
         url
         FROM 
-        jurisdiction
+        tb_jurisdiction
         WHERE 
         url_status = 1 
     </select>

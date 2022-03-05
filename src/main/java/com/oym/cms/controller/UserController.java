@@ -7,7 +7,6 @@ import com.oym.cms.service.UserService;
 import com.oym.cms.uitl.HttpServletRequestUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +37,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @PostMapping("/user/update")
-    @RequiresPermissions("/user/update")
+    @PostMapping("/user/login")
     public Map<String,Object> userLogin(HttpServletRequest request) {
         Map<String, Object> modelMap = new HashMap<>(16);
         String userId = HttpServletRequestUtil.getString(request, "userId");
@@ -78,7 +76,6 @@ public class UserController {
      * @param request
      */
     @PostMapping("/logout")
-    @ResponseBody
     public void staffLogout(HttpServletRequest request) {
         try {
             Subject subject = SecurityUtils.getSubject();

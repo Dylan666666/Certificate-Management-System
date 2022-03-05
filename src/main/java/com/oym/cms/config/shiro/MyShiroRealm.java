@@ -1,10 +1,11 @@
 package com.oym.cms.config.shiro;
 
+import com.alibaba.fastjson.JSON;
 import com.oym.cms.dto.UserDTO;
 import com.oym.cms.entity.User;
 import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.mapper.JurisdictionMapper;
-import com.oym.cms.service.UserService;
+import com.oym.cms.mapper.UserMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -27,7 +28,7 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Resource
     private JurisdictionMapper jurisdictionMapper;
     @Resource
-    private UserService userService;
+    private UserMapper userMapper;
 
     /**
      * 授权
@@ -59,20 +60,18 @@ public class MyShiroRealm extends AuthorizingRealm {
 
         //获取用户的输入的账号.
         String userId = (String) token.getPrincipal();
-
         //通过userId从数据库中查找 User对象.
-        UserDTO userDTO = userService.queryUserById(userId);
-        if (DTOMsgEnum.OK.getStatus() != userDTO.getMsg()) {
+        User user = userMapper.queryUserById(userId);
+        if (Objects.isNull(user)) {
             return null;
         }
-
         return new SimpleAuthenticationInfo(
                 //传入对象（一定要是对象！！！getPrimaryPrincipal()要取得）
-                userDTO.getUser(),
+                user,
                 //传入的是加密后的密码
-                userDTO.getUser().getUserPassword(),
+                user.getUserPassword(),
                 //传入salt
-                ByteSource.Util.bytes(userDTO.getUser().getUserId()),
+                ByteSource.Util.bytes(user.getUserId()),
                 getName());
     }
 }

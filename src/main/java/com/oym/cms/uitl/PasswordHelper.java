@@ -21,10 +21,9 @@ public class PasswordHelper {
         user.setUserName("梁莉丹");
         user.setUserPosition(UserPositionEnum.STUDENT.getStatus());
         user.setUserStatus(UserIdStatusEnum.OK.getStatus());
-        user.setUserPassword("20010908");
         
         //密码生成
-        String newPassword = new SimpleHash(ALGORITHM_NAME, user.getUserId(),
+        String newPassword = new SimpleHash(ALGORITHM_NAME, "20010908",
                 ByteSource.Util.bytes(user.getUserId()), HASH_ITERATIONS).toHex();
         System.out.println("加密后的密码是：" + newPassword);
     }
