@@ -124,7 +124,7 @@ public class ShiroConfig {
         return mySessionManager;
     }
 
-    private static final String HOST = "101.43.139.237:6379";
+    private static final String HOST = "127.0.0.1:6379";
     private static final int TIMEOUT = 1800;
 
     /**
