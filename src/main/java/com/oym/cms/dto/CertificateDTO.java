@@ -13,8 +13,13 @@ public class CertificateDTO {
     private Certificate certificate;
     private List<Certificate> certificateList;
     private Integer msg;
+    private Integer count;
 
     public CertificateDTO() {}
+
+    public CertificateDTO(Integer msg) {
+        this.msg = msg;
+    }
 
     public CertificateDTO(Certificate certificate, Integer msg) {
         this.certificate = certificate;
@@ -48,6 +53,14 @@ public class CertificateDTO {
 
     public void setMsg(Integer msg) {
         this.msg = msg;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     @Override

@@ -21,9 +21,13 @@ public interface CertificateMapper {
     /**
      * 查询该用户已存储的证书
      * @param userId
+     * @param rowIndex
+     * @param pageSize
      * @return
      */
-    List<Certificate> queryCertificateByUserId(@Param("userId") String userId);
+    List<Certificate> queryCertificateByUserId(@Param("userId") String userId, 
+                                               @Param("rowIndex") int rowIndex,
+                                               @Param("pageSize") int pageSize);
 
     /**
      * 查询该用户已存储的证书数量
@@ -31,4 +35,22 @@ public interface CertificateMapper {
      * @return
      */
     int queryCertificateCountByUserId(@Param("userId") String userId);
+
+    /**
+     * 模糊查询该用户已存储的证书
+     * @param certificateCondition
+     * @param rowIndex
+     * @param pageSize
+     * @return
+     */
+    List<Certificate> queryCertificateByCondition(@Param("certificateCondition") Certificate certificateCondition,
+                                               @Param("rowIndex") int rowIndex,
+                                               @Param("pageSize") int pageSize);
+
+    /**
+     * 模糊查询该用户已存储的证书的数量
+     * @param certificateCondition
+     * @return
+     */
+    int queryCertificateCountByCondition(@Param("certificateCondition") Certificate certificateCondition);
 }

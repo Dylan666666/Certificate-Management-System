@@ -22,6 +22,10 @@
         tb_certificate
         WHERE 
         user_id = #{userId}
+        ORDER BY
+        certificate_win_time
+        DESC 
+        LIMIT #{rowIndex},#{pageSize}
     </select>
 
     <select id="queryCertificateCountByUserId" resultType="int">
@@ -31,5 +35,49 @@
         tb_certificate
         WHERE 
         user_id = #{userId}
+    </select>
+
+    <select id="queryCertificateByCondition" resultType="com.oym.cms.entity.Certificate">
+        SELECT 
+        *
+        FROM 
+        tb_certificate s
+        WHERE
+        <where>
+            <if test="certificateCondition.userId != null">
+                AND
+                s.user_id = #{userId}
+            </if>
+            <if test="certificateCondition.certificateName != null">
+                AND
+                s.certificate_name
+                LIKE
+                '%${certificateCondition.certificateName}%'
+            </if>
+        </where>
+        ORDER BY
+        s.certificate_win_time
+        DESC 
+        LIMIT #{rowIndex},#{pageSize}
+    </select>
+
+    <select id="queryCertificateCountByCondition" resultType="int">
+        SELECT
+        count(*)
+        FROM
+        tb_certificate s
+        WHERE
+        <where>
+            <if test="certificateCondition.userId != null">
+                AND
+                s.user_id = #{userId}
+            </if>
+            <if test="certificateCondition.certificateName != null">
+                AND
+                s.certificate_name
+                LIKE
+                '%${certificateCondition.certificateName}%'
+            </if>
+        </where>
     </select>
 </mapper>

@@ -38,7 +38,8 @@ public class CertificateMapperTest {
     
     @Test
     public void queryTest() {
-        List<Certificate> list = certificateMapper.queryCertificateByUserId("2019110117");
+        List<Certificate> list = certificateMapper
+                .queryCertificateByUserId("2019110117", 0 ,10);
         System.out.println(list.size());
         System.out.println(list.get(0).toString());
         int count = certificateMapper.queryCertificateCountByUserId("2019110117");

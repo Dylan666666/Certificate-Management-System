@@ -18,7 +18,33 @@ public interface CertificateService {
     /**
      * 查询该用户已存储的证书
      * @param userId
+     * @param pageIndex
+     * @param pageSize
      * @return
      */
-    CertificateDTO queryCertificateByUserId(String userId);
+    CertificateDTO queryCertificateByUserId(String userId, int pageIndex, int pageSize);
+
+
+    /**
+     * 查询该用户已存储的证书数量
+     * @param userId
+     * @return
+     */
+    CertificateDTO queryCertificateCountByUserId(String userId);
+
+    /**
+     * 模糊查询该用户已存储的证书
+     * @param certificateCondition
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    CertificateDTO queryCertificateByCondition(Certificate certificateCondition, int pageIndex, int pageSize);
+
+    /**
+     * 模糊查询该用户已存储的证书数量
+     * @param certificateCondition
+     * @return
+     */
+    CertificateDTO queryCertificateCountByCondition(Certificate certificateCondition);
 }
