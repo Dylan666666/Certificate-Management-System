@@ -12,6 +12,7 @@ import com.oym.cms.uitl.PageCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,6 +34,7 @@ public class CertificateServiceImpl implements CertificateService {
 
 
     @Override
+    @Transactional
     public synchronized CertificateDTO addCertificate(Certificate certificate) throws CertificateException {
         if (certificate != null 
                 && certificate.getCertificateDescription() != null 

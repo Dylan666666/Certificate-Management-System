@@ -72,6 +72,10 @@
                 AND
                 s.user_id = #{userId}
             </if>
+            <if test="certificateCondition.certificate_type != null">
+                AND
+                s.certificate_type = #{certificateType}
+            </if>
             <if test="certificateCondition.certificateName != null">
                 AND
                 s.certificate_name
