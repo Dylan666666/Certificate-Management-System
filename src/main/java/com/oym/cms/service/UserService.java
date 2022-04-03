@@ -1,6 +1,7 @@
 package com.oym.cms.service;
 
 import com.oym.cms.dto.UserDTO;
+import com.oym.cms.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -24,4 +25,12 @@ public interface UserService {
      * @return
      */
     UserDTO userLogin(@Param("userId") String userId, @Param("userPassword") String userPassword);
+
+    /**
+     * 更新账户信息
+     *
+     * @param user
+     * @return
+     */
+    UserDTO updateUser(User user);
 }

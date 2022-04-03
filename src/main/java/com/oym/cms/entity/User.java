@@ -35,6 +35,32 @@ public class User implements Serializable {
      */
     private String userToken;
 
+    /**
+     * 学校标识
+     */
+    private String schoolFlag;
+
+    /**
+     * 身份证号码
+     */
+    private String Id;
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
+
+    public String getSchoolFlag() {
+        return schoolFlag;
+    }
+
+    public void setSchoolFlag(String schoolFlag) {
+        this.schoolFlag = schoolFlag;
+    }
+
     public String getUserToken() {
         return userToken;
     }

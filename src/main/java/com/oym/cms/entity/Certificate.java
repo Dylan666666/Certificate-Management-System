@@ -41,6 +41,19 @@ public class Certificate implements Serializable {
      */
     private String certificateDescription;
 
+    /**
+     * 证书凭证URL
+     */
+    private String certificateUrl;
+
+    public String getCertificateUrl() {
+        return certificateUrl;
+    }
+
+    public void setCertificateUrl(String certificateUrl) {
+        this.certificateUrl = certificateUrl;
+    }
+
     public String getCertificateDescription() {
         return certificateDescription;
     }

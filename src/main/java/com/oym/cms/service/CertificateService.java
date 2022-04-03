@@ -40,11 +40,5 @@ public interface CertificateService {
      * @return
      */
     CertificateDTO queryCertificateByCondition(Certificate certificateCondition, int pageIndex, int pageSize);
-
-    /**
-     * 模糊查询该用户已存储的证书数量
-     * @param certificateCondition
-     * @return
-     */
-    CertificateDTO queryCertificateCountByCondition(Certificate certificateCondition);
+    
 }

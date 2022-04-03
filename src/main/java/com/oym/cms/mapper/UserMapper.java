@@ -15,4 +15,13 @@ public interface UserMapper {
      * @return
      */
     User queryUserById(@Param("userId") String userId);
+
+    /**
+     * 更新账户信息
+     *
+     * @param user
+     * @return
+     */
+    int updateUser(User user);
+    
 }

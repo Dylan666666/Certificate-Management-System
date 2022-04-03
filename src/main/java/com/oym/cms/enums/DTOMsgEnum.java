@@ -14,7 +14,8 @@ public enum DTOMsgEnum {
     ACCOUNT_NOT_EXIST(-2001, "账号不存在"),
     WRONG_PASSWORD(-2002, "密码不正确"),
     LOGIN_FAIL(-2003, "用户验证失败"),
-    ACCOUNT_INVALID(-2004, "该用户账号已失效");
+    ACCOUNT_INVALID(-2004, "该用户账号已失效"),
+    WRONG_ID(-2005,"身份证号码有误");
 
     private int status;
     private String statusInfo;

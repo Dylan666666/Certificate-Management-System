@@ -28,11 +28,11 @@ public class AssetClient {
   private BcosSDK bcosSDK;
   private Client client;
   private CryptoKeyPair cryptoKeyPair;
-
+  
   public void initialize() throws Exception {
     @SuppressWarnings("resource")
     ApplicationContext context =
-        new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        new ClassPathXmlApplicationContext("classpath:application.properties");
     bcosSDK = context.getBean(BcosSDK.class);
     client = bcosSDK.getClient();
     cryptoKeyPair = client.getCryptoSuite().getCryptoKeyPair();

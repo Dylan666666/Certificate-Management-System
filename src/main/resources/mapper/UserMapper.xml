@@ -11,4 +11,14 @@
         WHERE 
         user_id = #{userId}
     </select>
+
+    <update id="updateUser" parameterType="com.oym.cms.entity.User">
+        UPDATE
+        tb_user
+        <set>
+            <if test="userPassword != null"> user_password = #{userPassword}</if>
+        </set>
+        WHERE
+        user_id = #{userId}
+    </update>
 </mapper>

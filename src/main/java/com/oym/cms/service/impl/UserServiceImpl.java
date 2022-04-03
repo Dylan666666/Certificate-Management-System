@@ -8,6 +8,7 @@ import com.oym.cms.enums.UserIdStatusEnum;
 import com.oym.cms.exceptions.UserException;
 import com.oym.cms.mapper.UserMapper;
 import com.oym.cms.service.UserService;
+import com.oym.cms.uitl.PasswordHelper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -92,6 +93,38 @@ public class UserServiceImpl implements UserService {
             }catch (UserException e) {
                 LOGGER.error("UserServiceImpl queryUserById error userId:{}", userId);
                 return new UserDTO(null, DTOMsgEnum.LOGIN_FAIL.getStatus());
+            }
+        }
+        return new UserDTO(null, DTOMsgEnum.EMPTY_INPUT_STR.getStatus());
+    }
+
+    @Override
+    public UserDTO updateUser(User user) {
+        if (user != null && user.getUserId() != null) {
+            try {
+                User userQuery = userMapper.queryUserById(user.getUserId());
+                if (userQuery == null) {
+                    LOGGER.info("UserServiceImpl updateUser user:{}, Nonexistent Account",  JSON.toJSONString(user));
+                    return new UserDTO(null, DTOMsgEnum.ACCOUNT_NOT_EXIST.getStatus());
+                }
+                //更改密码逻辑
+                if (user.getUserPassword() != null && user.getId() != null) {
+                    if (!userQuery.getId().equals(user.getId())) {
+                        LOGGER.info("UserServiceImpl updateUser user:{}, ID WRONG",  JSON.toJSONString(user));
+                        return new UserDTO(null, DTOMsgEnum.WRONG_ID.getStatus());
+                    }
+                    //对新密码进行加密
+                    PasswordHelper.encryptPassword(user);
+                }
+                int res = userMapper.updateUser(user);
+                if (res == 0) {
+                    LOGGER.info("UserServiceImpl updateUser user:{}, update fail",  JSON.toJSONString(user));
+                    return new UserDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
+                }
+                return new UserDTO(user, DTOMsgEnum.OK.getStatus());
+            } catch (UserException e) {
+                LOGGER.error("UserServiceImpl updateUser exception user:{}", JSON.toJSONString(user));
+                return new UserDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
             }
         }
         return new UserDTO(null, DTOMsgEnum.EMPTY_INPUT_STR.getStatus());
