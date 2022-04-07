@@ -5,13 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.UUID;
 
 /**
  * 分布式证书存储客户端类
  * @Author: Mr_OO
- * @Date: 2022/3/2 15:04
+ * @Date: 2022/4/2 15:04
  */
 public class FastDFSClient {
 
@@ -191,14 +189,13 @@ public class FastDFSClient {
 
     public static void main(String[] args) {
         try {
-            File file = new File("C:/Users/14396/Desktop/my/图片/绿叶.png");
-            InputStream inputStream = new FileInputStream(file);
-            String fileName = "110429" + ImageUtil.getRandomFileName() + 
-                    ImageUtil.getFileExtension("C:/Users/14396/Desktop/my/图片/绿叶.png");
-            String[] result = FastDFSClient.uploadFile(inputStream, fileName);
-            //[group1, M00/00/00/CgAYCGJFpQKACftIAAAbnjkyo8A652.png]
-            System.out.println(ImageUtil.IMAGE_URL_PRE + ImageUtil.getImageUrl(result));
-            //http://101.43.139.237:8081/group1/M00/00/00/CgAYCGJFsVmAWtitAAAbnjkyo8A098.png
+//            File file = new File("C:/Users/14396/Desktop/my/图片/绿叶.png");
+//            InputStream inputStream = new FileInputStream(file);
+//            String fileName = "110429" + ImageUtil.getRandomFileName() + ".png"
+//            String[] result = FastDFSClient.uploadFile(inputStream, fileName);
+//            //[group1, M00/00/00/CgAYCGJFpQKACftIAAAbnjkyo8A652.png]
+//            System.out.println(ImageUtil.IMAGE_URL_PRE + ImageUtil.getImageUrl(result));
+//            //http://101.43.139.237:8081/group1/M00/00/00/CgAYCGJFsVmAWtitAAAbnjkyo8A098.png
         } catch (Exception e) {
             e.printStackTrace();
         }

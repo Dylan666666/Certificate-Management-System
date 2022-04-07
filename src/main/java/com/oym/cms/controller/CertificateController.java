@@ -3,7 +3,9 @@ package com.oym.cms.controller;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oym.cms.dto.CertificateDTO;
+import com.oym.cms.dto.ImageHolder;
 import com.oym.cms.entity.Certificate;
+import com.oym.cms.enums.CertificateTypeEnum;
 import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.exceptions.CertificateException;
 import com.oym.cms.service.CertificateService;
@@ -15,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -69,9 +74,27 @@ public class CertificateController {
             LOGGER.error("CertificateController addNewOneCertificate error certificate:{}", certificateStr);
             return modelMap;
         }
-
+        ImageHolder thumbnail = null;
         try {
-            CertificateDTO res = certificateService.addCertificate(certificate);
+            //获取文件流
+            CommonsMultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+            if (resolver.isMultipart(request)) {
+                MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
+                CommonsMultipartFile thumbnailFile = (CommonsMultipartFile) multipartHttpServletRequest.getFile("image");
+                if (thumbnailFile != null) {
+                    thumbnail = new ImageHolder(thumbnailFile.getOriginalFilename(), thumbnailFile.getInputStream());
+                } else {
+                    throw new Exception();
+                }
+            }
+        } catch (Exception e) {
+            modelMap.put("success", false);
+            modelMap.put("errMsg", DTOMsgEnum.ERROR_IMAGE.getStatusInfo());
+            LOGGER.error("CertificateController addNewOneCertificate error certificate:{}", certificateStr);
+        }
+        try {
+            //执行存储证书逻辑
+            CertificateDTO res = certificateService.addCertificate(certificate, thumbnail);
             if (res.getMsg() != DTOMsgEnum.OK.getStatus()) {
                 modelMap.put("success", false);
                 modelMap.put("errMsg", res.getMsg());
@@ -106,32 +129,34 @@ public class CertificateController {
         int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
         int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
         String userId = HttpServletRequestUtil.getString(request, "userId");
+        int certificateType = HttpServletRequestUtil.getInt(request, "certificateType");
         if (userId == null) {
             modelMap.put("success",false);
             modelMap.put("errMsg", DTOMsgEnum.EMPTY_INPUT_STR.getStatusInfo());
             LOGGER.error("CertificateController queryCertificateByUserId empty userId");
             return modelMap;
         }
-        if (pageIndex < 0) {
-            pageIndex = 0;
-        }
-        if (pageSize <= 0) {
-            pageSize = 10;
-        }
+        pageIndex = getPageIndex(pageIndex);
+        pageSize = getPageSize(pageSize);
         try {
-            CertificateDTO certificateDTOList = certificateService.queryCertificateByUserId(userId, pageIndex, pageSize);
-            CertificateDTO certificateDTOCount = certificateService.queryCertificateCountByUserId(userId);
-            if (certificateDTOList.getMsg() != DTOMsgEnum.OK.getStatus() 
-                    || certificateDTOCount.getMsg() != DTOMsgEnum.OK.getStatus()) {
+            //先判断证书类型合法性
+            if (certificateType == -1000) {
+                certificateType = CertificateTypeEnum.ALL_TYPE.getStatus();
+            } else {
+                checkCertificateType(certificateType);
+                LOGGER.info("CertificateController queryCertificateByUserId fail,no such cmsType certificateType:{}, userId:{}", 
+                        certificateType, userId);
+            }
+            CertificateDTO certificateDTOList = certificateService.queryCertificateByUserId(userId, certificateType, pageIndex, pageSize);
+            if (certificateDTOList.getMsg() != DTOMsgEnum.OK.getStatus()) {
                 modelMap.put("success", false);
-                modelMap.put("errMsg", DTOMsgEnum.stateOf(certificateDTOList.getMsg()).getStatusInfo() +
-                        " || " +  DTOMsgEnum.stateOf(certificateDTOCount.getMsg()).getStatusInfo());
-                LOGGER.info("CertificateController queryCertificateByUserId fail userId:{}", userId);
+                modelMap.put("errMsg", DTOMsgEnum.stateOf(certificateDTOList.getMsg()).getStatusInfo());
+                LOGGER.info("CertificateController queryCertificateByUserId fail, certificateType:{}, userId:{}", certificateType, userId);
                 return modelMap;
             }
-            LOGGER.info("CertificateController queryCertificateByUserId success userId:{}", userId);
+            LOGGER.info("CertificateController queryCertificateByUserId success, certificateType:{}, userId:{}", certificateType, userId);
             modelMap.put("CertificateList", certificateDTOList.getCertificateList());
-            modelMap.put("certificateCount", certificateDTOCount.getCount());
+            modelMap.put("certificateCount", certificateDTOList.getCount());
             modelMap.put("success", true);
         } catch (CertificateException e) {
             modelMap.put("success",false);
@@ -146,71 +171,25 @@ public class CertificateController {
         }
         return modelMap;
     }
+    
+    private int getPageIndex(int pageIndex) {
+        if (pageIndex < 0 || pageIndex > 1000) {
+            return 0;
+        }
+        return pageIndex;
+    }
 
-    /**
-     * 模糊查询用户拥有的证书
-     * @param request
-     * @return
-     */
-    @PostMapping("/certificate/userQueryByCondition")
-    @RequiresPermissions("/certificate/userQueryByCondition")
-    public Map<String,Object> queryCertificateByCondition(HttpServletRequest request) {
-        Map<String, Object> modelMap = new HashMap<>(16);
-        int pageIndex = HttpServletRequestUtil.getInt(request, "pageIndex");
-        int pageSize = HttpServletRequestUtil.getInt(request, "pageSize");
-        String certificateConditionStr = HttpServletRequestUtil.getString(request, "certificateCondition");
-        if (StringUtils.isEmpty(certificateConditionStr)) {
-            modelMap.put("success",false);
-            modelMap.put("errMsg", DTOMsgEnum.EMPTY_INPUT_STR.getStatusInfo());
-            LOGGER.error("CertificateController queryCertificateByCondition empty certificateCondition");
-            return modelMap;
+    private int getPageSize(int pageSize) {
+        if (pageSize <= 0 || pageSize > 100) {
+            return 10;
         }
-        ObjectMapper mapper = new ObjectMapper();
-        Certificate certificateCondition = null;
-        try {
-            certificateCondition = mapper.readValue(certificateConditionStr, Certificate.class);
-        } catch (Exception e) {
-            modelMap.put("success",false);
-            modelMap.put("errMsg", DTOMsgEnum.ERROR_INPUT_STR.getStatusInfo());
-            return modelMap;
+        return pageSize;
+    }
+    
+    private void checkCertificateType(int type) {
+        if (CertificateTypeEnum.stateOf(type) == null) {
+            throw new CertificateException(DTOMsgEnum.ERROR_INPUT_STR.getStatusInfo());
         }
-        if (pageIndex < 0) {
-            pageIndex = 0;
-        }
-        if (pageSize <= 0) {
-            pageSize = 10;
-        }
-        try {
-            CertificateDTO certificateDTOList = certificateService.queryCertificateByCondition(certificateCondition, pageIndex, pageSize);
-            CertificateDTO certificateDTOCount = certificateService.queryCertificateCountByCondition(certificateCondition);
-            if (certificateDTOList.getMsg() != DTOMsgEnum.OK.getStatus()
-                    || certificateDTOCount.getMsg() != DTOMsgEnum.OK.getStatus()) {
-                modelMap.put("success", false);
-                modelMap.put("errMsg", DTOMsgEnum.stateOf(certificateDTOList.getMsg()).getStatusInfo() +
-                        " || " +  DTOMsgEnum.stateOf(certificateDTOCount.getMsg()).getStatusInfo());
-                LOGGER.info("CertificateController queryCertificateByCondition fail certificateCondition:{}",
-                        JSON.toJSONString(certificateCondition));
-                return modelMap;
-            }
-            LOGGER.info("CertificateController queryCertificateByCondition success certificateCondition:{}", 
-                    JSON.toJSONString(certificateCondition));
-            modelMap.put("CertificateList", certificateDTOList.getCertificateList());
-            modelMap.put("certificateCount", certificateDTOCount.getCount());
-            modelMap.put("success", true);
-        } catch (CertificateException e) {
-            modelMap.put("success",false);
-            modelMap.put("errMsg", DTOMsgEnum.ERROR_EXCEPTION.getStatusInfo());
-            LOGGER.error("CertificateController queryCertificateByCondition error certificateCondition:{}", 
-                    JSON.toJSONString(certificateCondition));
-            return modelMap;
-        } catch (Exception e ){
-            modelMap.put("success", false);
-            modelMap.put("errMsg", DTOMsgEnum.ERROR_EXCEPTION.getStatusInfo());
-            LOGGER.error("CertificateController queryCertificateByCondition error certificateCondition:{}", 
-                    JSON.toJSONString(certificateCondition));
-            return modelMap;
-        }
-        return modelMap;
     }
     
 }

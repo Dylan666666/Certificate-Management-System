@@ -17,17 +17,12 @@ public class Certificate implements Serializable {
     private String certificateName;
 
     /**
-     * 证书序列号
-     */
-    private String certificateId;
-
-    /**
      * 证书类别
      */
     private Integer certificateType;
 
     /**
-     * 用户id
+     * 用户学号，对应stuNumber
      */
     private String userId;
 
@@ -70,14 +65,6 @@ public class Certificate implements Serializable {
         this.certificateName = certificateName;
     }
 
-    public String getCertificateId() {
-        return certificateId;
-    }
-
-    public void setCertificateId(String certificateId) {
-        this.certificateId = certificateId;
-    }
-
     public Integer getCertificateType() {
         return certificateType;
     }
@@ -106,11 +93,11 @@ public class Certificate implements Serializable {
     public String toString() {
         return "Certificate{" +
                 "certificateName='" + certificateName + '\'' +
-                ", certificateId='" + certificateId + '\'' +
                 ", certificateType=" + certificateType +
                 ", userId='" + userId + '\'' +
                 ", certificateWinTime=" + certificateWinTime +
                 ", certificateDescription='" + certificateDescription + '\'' +
+                ", certificateUrl='" + certificateUrl + '\'' +
                 '}';
     }
 }

@@ -23,24 +23,19 @@ public class ImageUtil {
     private static final Random random = new Random();
     
     /**
-     * 生成随机文件名，当前年月日小时分秒+五位随机数
+     * 随机文件名生成算法
      * @return
      */
-    public static String getRandomFileName() {
+    public static String getRandomFileName(String userId, String fileName) {
         //获取随机的五位数
         int ranNum = random.nextInt(89999) + 10000;
         //当前年月日小时分秒
         String nowTimeStr = sDateFormat.format(new Date()).substring(7);
-        return nowTimeStr + ranNum;
-    }
-
-    /**
-     * 获取输入流的扩展名
-     * @param fileName
-     * @return
-     */
-    public static String getFileExtension(String fileName) {
-        return fileName.substring(fileName.lastIndexOf("."));
+        //账号后半部分
+        String userIdLast = userId.substring(userId.length() / 2);
+        //文件后缀
+        String imageEx = fileName.substring(fileName.lastIndexOf("."));
+        return  userIdLast + nowTimeStr + ranNum + imageEx;
     }
 
     /**
@@ -52,7 +47,7 @@ public class ImageUtil {
         if (result.length < 2) {
             return null;
         } else {
-            return result[0] + "/" + result[1];
+            return "/" + result[0] + "/" + result[1];
         }
     }
     

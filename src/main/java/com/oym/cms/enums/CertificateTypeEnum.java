@@ -5,6 +5,7 @@ package com.oym.cms.enums;
  * @Date: 2022/3/5 20:09
  */
 public enum CertificateTypeEnum {
+    ALL_TYPE(0, "所有类型(用于后端程序查询注入)"),
     SCHOLARSHIP_AND_HONORARY_TITLE(1001, "奖学金及荣誉称号类"),
     DISCIPLINE_COMPETITION(1002, "学科竞赛类"),
     QUALIFICATION_LEVEL(1003, "资格等级类"),

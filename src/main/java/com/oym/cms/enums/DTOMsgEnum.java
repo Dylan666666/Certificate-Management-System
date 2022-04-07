@@ -15,7 +15,11 @@ public enum DTOMsgEnum {
     WRONG_PASSWORD(-2002, "密码不正确"),
     LOGIN_FAIL(-2003, "用户验证失败"),
     ACCOUNT_INVALID(-2004, "该用户账号已失效"),
-    WRONG_ID(-2005,"身份证号码有误");
+    WRONG_ID(-2005,"身份证号码有误"),
+    
+    ERROR_IMAGE(-3001, "图片提交失败"),
+    
+    NO_SEND_IMMEDIATELY(-4001, "请勿在短时间内重复提交");
 
     private int status;
     private String statusInfo;
