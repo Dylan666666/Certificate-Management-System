@@ -1,7 +1,7 @@
 package com.oym.cms.config.mapper;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import com.oym.cms.uitl.DESUtil;
+import com.oym.cms.util.DESUtil;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -32,14 +32,13 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     /**
      * 授权
-     *
      * @param principalCollection
      * @return
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-        //取出职工功能表数据
+        //取出用户权限URL表数据
         List<String> urlList = jurisdictionMapper.queryAllUrls();
         //授权
         for (String s : urlList) {

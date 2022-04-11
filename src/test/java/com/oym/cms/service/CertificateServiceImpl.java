@@ -1,10 +1,5 @@
 package com.oym.cms.service;
 
-import com.oym.cms.dto.CertificateDTO;
-import com.oym.cms.entity.Certificate;
-import com.oym.cms.enums.CertificateTypeEnum;
-import com.oym.cms.enums.DTOMsgEnum;
-import com.oym.cms.uitl.CertificateIdBuildUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

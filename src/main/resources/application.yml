@@ -1,0 +1,61 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
+    
+#数据库驱动
+jdbc:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/cms?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+  username: WnplV/ietfQ=
+  password: DAnmDPxeeqw=
+  
+#Mybatis
+mybatis_config_file: mybatis-config.xml
+mybatis:
+  mapper-locations: /mapper/**.xml
+type_alias_package: com.oym.cms.entity
+
+#Redis
+redis:
+  hostname: 127.0.0.1
+  port: 6379
+  pool: 
+    maxActive: 200
+    maxIdle: 50
+    maxWait: 3000
+    testOnBorrow: true
+  expire: 1800
+  timeout: 1800
+
+com.mchange.v2.log.MLog: com.mchange.v2.log.FallbackMLog
+com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL: OFF
+multipart.enabled: true
+
+#区块链
+cryptoMaterial:
+  certPath: "conf"
+network:
+  peers:
+    - "101.43.139.237:20200"
+    - "101.43.139.237:20201"
+account:
+  keyStoreDir: "account"
+  accountFileFormat: "pem"
+  accountAddress: "0xc74df1265e95485dcc7ab88d641d121ee49df172"
+threadPool:
+  maxBlockingQueueSize: "102400"
+contract-address:
+  CertificateIQ: 0xcb07c87caf64218cf75114c2496f10c44085a956
+#FastDFS
+connect_timeout: 10
+network_timeout: 30
+charset: UTF-8
+http.tracker_http_port: 9080
+tracker_server: 101.43.139.237:22122

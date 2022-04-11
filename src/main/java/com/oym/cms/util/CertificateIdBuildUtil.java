@@ -1,4 +1,4 @@
-package com.oym.cms.uitl;
+package com.oym.cms.util;
 
 /**
  * 证书序列号生成器

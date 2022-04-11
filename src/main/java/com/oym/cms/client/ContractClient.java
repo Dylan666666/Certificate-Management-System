@@ -12,13 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * 合约接口调用类
@@ -64,7 +62,6 @@ public class ContractClient {
         } catch (Exception e) {
             LOGGER.info("ContractClient registerCertificate exception cmsUrl:{}, e:{}", cmsUrl, e.getMessage());
         }
-        LOGGER.info("ContractClient registerCertificate fail cmsUrl:{}", cmsUrl);
         return DTOMsgEnum.ERROR_EXCEPTION.getStatus();
     }
 

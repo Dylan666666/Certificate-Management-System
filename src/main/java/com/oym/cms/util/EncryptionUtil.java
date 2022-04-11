@@ -1,4 +1,4 @@
-package com.oym.cms.uitl;
+package com.oym.cms.util;
 
 import java.security.MessageDigest;
 

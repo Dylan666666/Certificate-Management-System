@@ -1,4 +1,4 @@
-package com.oym.cms.uitl;
+package com.oym.cms.util;
 
 import com.oym.cms.entity.User;
 import com.oym.cms.enums.UserIdStatusEnum;

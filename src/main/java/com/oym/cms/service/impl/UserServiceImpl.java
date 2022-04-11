@@ -1,6 +1,8 @@
 package com.oym.cms.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.oym.cms.dto.UserDTO;
 import com.oym.cms.entity.User;
 import com.oym.cms.enums.DTOMsgEnum;
@@ -8,7 +10,7 @@ import com.oym.cms.enums.UserIdStatusEnum;
 import com.oym.cms.exceptions.UserException;
 import com.oym.cms.mapper.UserMapper;
 import com.oym.cms.service.UserService;
-import com.oym.cms.uitl.PasswordHelper;
+import com.oym.cms.util.PasswordHelper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.Duration;
 
 /**
  * @Author: Mr_OO
@@ -35,6 +38,16 @@ public class UserServiceImpl implements UserService {
     
     @Resource
     private UserMapper userMapper;
+
+    /**
+     * 本地缓存引入，防止恶意上传
+     */
+    private Cache<String, String> dataCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(Duration.ofSeconds(3))
+            .maximumSize(10240)
+            .concurrencyLevel(4)
+            .initialCapacity(2048)
+            .build();
     
     @Override
     public UserDTO queryUserById(String userId) throws UserException {
@@ -60,6 +73,15 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("UserServiceImpl userLogin userId:{}", userId);
         if (userId != null && userPassword != null) {
             try {
+                //先经过本地缓存判断用户是否恶意上传
+                String value = dataCache.getIfPresent(userId);
+                if (value == null) {
+                    dataCache.put("userLogin" + userId, "v");
+                } else {
+                    //恶意上传直接跳出方法
+                    LOGGER.info("UserServiceImpl userLogin fail, NO_SEND_IMMEDIATELY, userId:{}", userId);
+                    return new UserDTO(null, DTOMsgEnum.NO_SEND_IMMEDIATELY.getStatus());
+                }
                 User userQuery = userMapper.queryUserById(userId);
                 if (userQuery == null) {
                     LOGGER.info("UserServiceImpl userLogin userId:{}, Nonexistent Account", userId);
@@ -102,6 +124,15 @@ public class UserServiceImpl implements UserService {
     public UserDTO updateUser(User user) {
         if (user != null && user.getUserId() != null) {
             try {
+                //先经过本地缓存判断用户是否恶意上传
+                String value = dataCache.getIfPresent(user.getUserId());
+                if (value == null) {
+                    dataCache.put("updateUser" + user.getUserId(), "v");
+                } else {
+                    //恶意上传直接跳出方法
+                    LOGGER.info("UserServiceImpl updateUser fail, NO_SEND_IMMEDIATELY, userId:{}", user.getUserId());
+                    return new UserDTO(null, DTOMsgEnum.NO_SEND_IMMEDIATELY.getStatus());
+                }
                 User userQuery = userMapper.queryUserById(user.getUserId());
                 if (userQuery == null) {
                     LOGGER.info("UserServiceImpl updateUser user:{}, Nonexistent Account",  JSON.toJSONString(user));

@@ -37,23 +37,19 @@ public class ShiroConfig {
 
         // 过滤器链定义映射
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-
         /*
          * anon:所有url都都可以匿名访问，authc:所有url都必须认证通过才可以访问;
          * 过滤链定义，从上向下顺序执行，authc 应放在 anon 下面
          */
         filterChainDefinitionMap.put("/user/login", "anon");
-
+        filterChainDefinitionMap.put("/user/login", "anon");
         // 所有url都必须认证通过才可以访问
         filterChainDefinitionMap.put("/**", "authc");
-
         // 配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了, 位置放在 anon、authc下面
         filterChainDefinitionMap.put("/logout", "logout");
-
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
-        // 配器shiro认登录地址，前后端分离中登录累面跳转应由前端路由控制，后台仅返回json数据, 对应LoginController中unAuth请求
+        // 配器shiro默认登录地址，前后端分离中登录累面跳转应由前端路由控制，后台仅返回json数据, 对应LoginController中unAuth请求
         shiroFilterFactoryBean.setLoginUrl("/user/login");
-
         // 未授权界面, 对应LoginController中 unauthorized 请求
         shiroFilterFactoryBean.setUnauthorizedUrl("/user/login");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

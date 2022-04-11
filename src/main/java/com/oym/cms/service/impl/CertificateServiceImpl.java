@@ -14,8 +14,8 @@ import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.exceptions.CertificateException;
 import com.oym.cms.mapper.UserMapper;
 import com.oym.cms.service.CertificateService;
-import com.oym.cms.uitl.ImageUtil;
-import com.oym.cms.uitl.PageCalculator;
+import com.oym.cms.util.ImageUtil;
+import com.oym.cms.util.PageCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -64,7 +64,7 @@ public class CertificateServiceImpl implements CertificateService {
                 //先经过本地缓存判断用户是否恶意上传
                 String value = dataCache.getIfPresent(certificate.getUserId());
                 if (value == null) {
-                    dataCache.put(certificate.getUserId(), "v");
+                    dataCache.put("addCertificate" + certificate.getUserId(), "v");
                 } else {
                     //恶意上传直接跳出方法
                     LOGGER.info("CertificateServiceImpl addCertificate fail, NO_SEND_IMMEDIATELY, certificate:{}", JSON.toJSONString(certificate));
@@ -89,7 +89,7 @@ public class CertificateServiceImpl implements CertificateService {
                 //存储区块链
                 int res = contractClient.registerCertificate(
                         user.getSchoolFlag(), user.getUserId(), user.getUserName(), certificate.getCertificateName(), 
-                        String.valueOf(certificate.getCertificateType()), certificate.getCertificateWinTime().toString(), 
+                        String.valueOf(certificate.getCertificateType()), String.valueOf(certificate.getCertificateWinTime().getTime()), 
                         certificate.getCertificateDescription(), imageUrl);
                 if (DTOMsgEnum.OK.getStatus() != res) {
                     LOGGER.info("CertificateServiceImpl addCertificate fail certificate:{}", JSON.toJSONString(certificate));

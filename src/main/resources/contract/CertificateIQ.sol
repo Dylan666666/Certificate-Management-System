@@ -24,14 +24,14 @@ contract CertificateIQ{
     
     string constant TABLE_NAME = "t_cms";
 
-    // 证书信息表, ID
+    // 证书信息表
     // |  证书id  |  学校标识   |    学号    |   姓名    | 证书名称 | 证书类别 |   颁发时间  | 证书描述 | 证书凭证URL | 
     // |---------|------------|-----------|----------|---------|---------|------------|---------|-----------|
     // |   ID    | schoolFlag | stuNumber | userName | cmsName | cmsType | cmsWinTime | cmsDesc |   cmsUrl  |
     // |---------|------------|-----------|----------|---------|---------|------------|---------|-----------|
     //
+    
     // 创建表
-
     function create() 
     public 
     returns(int) 

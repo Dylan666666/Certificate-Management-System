@@ -1,4 +1,4 @@
-package com.oym.cms.uitl;
+package com.oym.cms.util;
 
 /**
  * 分页查询 —— 行索引计算工具

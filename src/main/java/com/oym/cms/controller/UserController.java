@@ -4,10 +4,10 @@ import com.oym.cms.dto.UserDTO;
 import com.oym.cms.entity.User;
 import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.service.UserService;
-import com.oym.cms.uitl.HttpServletRequestUtil;
-import com.oym.cms.uitl.PasswordHelper;
+import com.oym.cms.util.HttpServletRequestUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +59,8 @@ public class UserController {
                 return modelMap;
             }
             userDTO.getUser().setUserPassword("");
+            //保护隐私
+            userDTO.getUser().setId("");
             LOGGER.info("UserController userLogin success userId:{}", userId);
             modelMap.put("user", userDTO.getUser());
             modelMap.put("success",true);
@@ -76,7 +78,7 @@ public class UserController {
      * @param request
      * @return
      */
-    @PostMapping("/user/changUserPassword")
+    @PostMapping("/user/changeUserPassword")
     public Map<String,Object> userChangePassword(HttpServletRequest request) {
         Map<String, Object> modelMap = new HashMap<>(16);
         String userId = HttpServletRequestUtil.getString(request, "userId");

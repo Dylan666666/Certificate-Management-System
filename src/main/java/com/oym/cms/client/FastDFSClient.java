@@ -1,6 +1,5 @@
 package com.oym.cms.client;
 
-import com.oym.cms.uitl.ImageUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;

@@ -1,6 +1,5 @@
 package com.oym.cms.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oym.cms.dto.CertificateDTO;
 import com.oym.cms.dto.ImageHolder;
@@ -9,7 +8,7 @@ import com.oym.cms.enums.CertificateTypeEnum;
 import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.exceptions.CertificateException;
 import com.oym.cms.service.CertificateService;
-import com.oym.cms.uitl.HttpServletRequestUtil;
+import com.oym.cms.util.HttpServletRequestUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
