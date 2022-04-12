@@ -46,7 +46,7 @@ contract CertificateIQ{
     function register(string schoolFlag, string stuNumber, string userName, 
         string cmsName, string cmsType, string cmsWinTime, string cmsDesc, string cmsUrl) 
     public 
-    returns(int256) 
+    returns(int) 
     {
         Table table = TableFactory(0x1001).openTable(TABLE_NAME);
         Entry entry = table.newEntry();

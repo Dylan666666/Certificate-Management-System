@@ -140,7 +140,6 @@ public class CertificateIQ extends Contract {
                 Arrays.<TypeReference<?>>asList(new TypeReference<Int256>() {}));
         List<Type> results = FunctionReturnDecoder.decode(data, function.getOutputParameters());
         return new Tuple1<BigInteger>(
-
                 (BigInteger) results.get(0).getValue()
                 );
     }

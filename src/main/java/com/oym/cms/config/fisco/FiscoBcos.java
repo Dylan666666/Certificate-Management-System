@@ -38,7 +38,7 @@ public class FiscoBcos {
         Representer representer = new Representer();
         representer.getPropertyUtils().setSkipMissingProperties(true);
         Yaml yaml = new Yaml(representer);
-        String configFile = "classpath:application.yml";
+        String configFile = "/application.yml";
         try (InputStream inputStream = this.getClass().getResourceAsStream(configFile)) {
             return yaml.loadAs(inputStream, ConfigProperty.class);
         } catch (Exception e) {
