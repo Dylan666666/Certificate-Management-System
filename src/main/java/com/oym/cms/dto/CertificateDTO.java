@@ -67,7 +67,9 @@ public class CertificateDTO {
     public String toString() {
         return "CertificateDTO{" +
                 "certificate=" + certificate +
+                ", certificateList=" + certificateList +
                 ", msg=" + msg +
+                ", count=" + count +
                 '}';
     }
 }

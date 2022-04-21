@@ -13,18 +13,12 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class RedisConfiguration {
-    @Value("${redis.hostname}")
-    private String hostname;
-    @Value("${redis.port}")
-    private int port;
-    @Value("${redis.pool.maxActive}")
-    private int maxTotal;
-    @Value("${redis.pool.maxIdle}")
-    private int maxIdle;
-    @Value("${redis.pool.maxWait}")
-    private long maxWaitMillis;
-    @Value("${redis.pool.testOnBorrow}")
-    private boolean testOnBorrow;
+    private String hostname = "127.0.0.1";
+    private int port = 6379;
+    private int maxTotal = 200;
+    private int maxIdle = 50;
+    private long maxWaitMillis = 3000;
+    private boolean testOnBorrow = true;
 
     @Resource
     private JedisPoolConfig jedisPoolConfig;

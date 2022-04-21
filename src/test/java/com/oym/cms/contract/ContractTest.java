@@ -41,7 +41,7 @@ public class ContractTest {
 
     @Test
     public void queryTest() {
-        List<Certificate> res =  contractClient.queryCertificateList("2018110428");
+        List<Certificate> res =  contractClient.queryCertificateList("2018110429");
         System.out.println("查询结果为：" + JSON.toJSONString(res));
     }
 }

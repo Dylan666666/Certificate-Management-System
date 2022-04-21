@@ -120,7 +120,7 @@ public class ContractClient {
         } catch (Exception e) {
             LOGGER.info("ContractClient queryCertificateList exception userId:{}", userId);
         }               
-        return null;
+        return new ArrayList<>();
     }
     
 }

@@ -40,13 +40,13 @@ public class PasswordHelper {
 
     public static void main(String[] args) {
         User user = new User();
-        user.setUserId("2019110117");
-        user.setUserName("梁莉丹");
+        user.setUserId("2018110429");
+        user.setUserName("欧阳鸣");
         user.setUserPosition(UserPositionEnum.STUDENT.getStatus());
         user.setUserStatus(UserIdStatusEnum.OK.getStatus());
         
         //密码生成
-        String newPassword = new SimpleHash(ALGORITHM_NAME, "20010908",
+        String newPassword = new SimpleHash(ALGORITHM_NAME, "20000602",
                 ByteSource.Util.bytes(user.getUserId()), HASH_ITERATIONS).toHex();
         System.out.println("加密后的密码是：" + newPassword);
     }

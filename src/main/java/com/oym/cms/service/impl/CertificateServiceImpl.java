@@ -1,10 +1,14 @@
 package com.oym.cms.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.oym.cms.client.ContractClient;
 import com.oym.cms.client.FastDFSClient;
+import com.oym.cms.config.redis.JedisUtil;
 import com.oym.cms.dto.CertificateDTO;
 import com.oym.cms.dto.ImageHolder;
 import com.oym.cms.entity.Certificate;
@@ -13,6 +17,7 @@ import com.oym.cms.enums.CertificateTypeEnum;
 import com.oym.cms.enums.DTOMsgEnum;
 import com.oym.cms.exceptions.CertificateException;
 import com.oym.cms.mapper.UserMapper;
+import com.oym.cms.service.CacheService;
 import com.oym.cms.service.CertificateService;
 import com.oym.cms.util.ImageUtil;
 import com.oym.cms.util.PageCalculator;
@@ -36,11 +41,23 @@ public class CertificateServiceImpl implements CertificateService {
      * CertificateServiceImpl log
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(CertificateServiceImpl.class);
+
+    /**
+     * 缓存前缀
+     */
+    private final static String CERTIFICATE_QUERY_SERVICE = "CertificateQueryService";
     
     @Resource
     private ContractClient contractClient;
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private JedisUtil.Keys jedisKeys;
+    @Resource
+    private JedisUtil.Strings jedisStrings;
+    @Resource
+    private CacheService cacheService;
 
     /**
      * 本地缓存引入，防止恶意上传
@@ -95,6 +112,8 @@ public class CertificateServiceImpl implements CertificateService {
                     LOGGER.info("CertificateServiceImpl addCertificate fail certificate:{}", JSON.toJSONString(certificate));
                     return new CertificateDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
                 }
+                //清空该账号查询缓存
+                cacheService.removeFromCache(CERTIFICATE_QUERY_SERVICE + user.getUserId());
                 LOGGER.info("CertificateServiceImpl addCertificate success certificate:{}", JSON.toJSONString(certificate));
                 return new CertificateDTO(null, DTOMsgEnum.OK.getStatus());
             } catch (CertificateException e) {
@@ -112,20 +131,53 @@ public class CertificateServiceImpl implements CertificateService {
                 //查询起始索引
                 int rowIndex = PageCalculator.calculatorRowIndex(pageIndex, pageSize);
                 //查询截止索引边界
-                int rowEndIndex = pageIndex + pageSize;
-                //查询证书列表
-                List<Certificate> certificateList = contractClient.queryCertificateList(userId);
+                int rowEndIndex = rowIndex + pageSize;
+                //生成缓存key
+                StringBuilder redisKey = new StringBuilder();
+                redisKey.append(CERTIFICATE_QUERY_SERVICE)
+                        .append(userId)
+                        .append(certificateType)
+                        .append(pageIndex)
+                        .append("pageSize:")
+                        .append(pageSize);
+                //查询证书列表 先走redis缓存
+                List<Certificate> certificateList = null;
+                ObjectMapper mapper = new ObjectMapper();
+                if (jedisKeys.exists(redisKey.toString())) {
+                    String jsonString = jedisStrings.get(redisKey.toString());
+                    JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, Certificate.class);
+                    try {
+                        certificateList = mapper.readValue(jsonString, javaType);
+                    } catch (JsonProcessingException e) {
+                        LOGGER.error("CertificateServiceImpl queryCertificateByUserId REDIS Exception userId:{}", userId);
+                        return new CertificateDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
+                    }
+                } else {
+                    //缓存不存在该列表信息
+                    certificateList = contractClient.queryCertificateList(userId);
+                    String jsonString = null;
+                    try {
+                        jsonString = mapper.writeValueAsString(certificateList);
+                    } catch (JsonProcessingException e) {
+                        LOGGER.error("CertificateServiceImpl queryCertificateByUserId REDIS Exception userId:{}", userId);
+                        return new CertificateDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
+                    }
+                    jedisStrings.set(redisKey.toString(), jsonString);
+                }
                 if (certificateList == null) {
                     LOGGER.error("CertificateServiceImpl queryCertificateByUserId BCOS Exception userId:{}", userId);
                     return new CertificateDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
                 }   
                 int size = certificateList.size();
                 CertificateDTO certificateDTO = new CertificateDTO();
-                List<Certificate> res = new ArrayList<>(pageSize);
+                List<Certificate> res = new ArrayList<>();
                 if (CertificateTypeEnum.ALL_TYPE.getStatus().equals(certificateType)) {
-                    if (pageIndex >= size) {
+                    //所有类别证书查询
+                    //起始点超过总数情况
+                    if (rowIndex > size) {
                         return new CertificateDTO(DTOMsgEnum.OK.getStatus(), new ArrayList<Certificate>());
                     }
+                    //边界判断
                     if (size < rowEndIndex) {
                         rowEndIndex = size;
                     }
@@ -144,11 +196,11 @@ public class CertificateServiceImpl implements CertificateService {
                     int count = typeList.size();
                     //注入该类证书总数量
                     certificateDTO.setCount(count);
-                    if (pageIndex >= count) {
+                    if (rowIndex > count) {
                         return new CertificateDTO(DTOMsgEnum.OK.getStatus(), new ArrayList<Certificate>());
                     }
                     if (count < rowEndIndex) {
-                        rowEndIndex = size;
+                        rowEndIndex = count;
                     }
                     for (int i = rowIndex; i < rowEndIndex; i++) {
                         res.add(typeList.get(i));

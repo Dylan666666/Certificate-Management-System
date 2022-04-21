@@ -89,8 +89,8 @@ public class MvcConfiguration implements WebMvcConfigurer, ApplicationContextAwa
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding("utf-8");
         // 1024 * 1024 * 2 = 2M
-        multipartResolver.setMaxUploadSize(2097152);
-        multipartResolver.setMaxInMemorySize(2097152);
+        multipartResolver.setMaxUploadSize(5242880);
+        multipartResolver.setMaxInMemorySize(5242880);
         return multipartResolver;
     }
 

@@ -143,8 +143,6 @@ public class CertificateController {
                 certificateType = CertificateTypeEnum.ALL_TYPE.getStatus();
             } else {
                 checkCertificateType(certificateType);
-                LOGGER.info("CertificateController queryCertificateByUserId fail,no such cmsType certificateType:{}, userId:{}", 
-                        certificateType, userId);
             }
             CertificateDTO certificateDTOList = certificateService.queryCertificateByUserId(userId, certificateType, pageIndex, pageSize);
             if (certificateDTOList.getMsg() != DTOMsgEnum.OK.getStatus()) {
@@ -180,13 +178,14 @@ public class CertificateController {
 
     private int getPageSize(int pageSize) {
         if (pageSize <= 0 || pageSize > 100) {
-            return 10;
+            return 5;
         }
         return pageSize;
     }
     
     private void checkCertificateType(int type) {
         if (CertificateTypeEnum.stateOf(type) == null) {
+            LOGGER.info("CertificateController queryCertificateByUserId fail,no such cmsType");
             throw new CertificateException(DTOMsgEnum.ERROR_INPUT_STR.getStatusInfo());
         }
     }

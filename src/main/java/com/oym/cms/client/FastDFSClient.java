@@ -19,7 +19,7 @@ public class FastDFSClient {
      */
     static {
         try {
-            ClientGlobal.init("application.properties");
+            ClientGlobal.init("FastDFSConfig.properties");
             TrackerClient trackerClient = new TrackerClient(ClientGlobal.g_tracker_group);
             TrackerServer trackerServer = trackerClient.getConnection();
             StorageServer storageServer = trackerClient.getStoreStorage(trackerServer);
