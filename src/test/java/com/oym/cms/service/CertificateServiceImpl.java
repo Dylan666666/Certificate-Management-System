@@ -1,5 +1,6 @@
 package com.oym.cms.service;
 
+import com.alibaba.fastjson.JSON;
 import com.oym.cms.config.redis.JedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,8 @@ public class CertificateServiceImpl {
     
     @Test
     public void queryTest() {
-        
+        System.out.println(JSON.toJSONString(certificateService
+                .queryCertificateByUserId("2018110429", 1001, 0, 5)));
     }
     
     @Test

@@ -113,7 +113,8 @@ public class CertificateServiceImpl implements CertificateService {
                     return new CertificateDTO(null, DTOMsgEnum.ERROR_EXCEPTION.getStatus());
                 }
                 //清空该账号查询缓存
-                cacheService.removeFromCache(CERTIFICATE_QUERY_SERVICE + user.getUserId());
+                cacheService.removeFromCache(CERTIFICATE_QUERY_SERVICE + "type" 
+                        + certificate.getCertificateType() + "id" + user.getUserId());
                 LOGGER.info("CertificateServiceImpl addCertificate success certificate:{}", JSON.toJSONString(certificate));
                 return new CertificateDTO(null, DTOMsgEnum.OK.getStatus());
             } catch (CertificateException e) {
@@ -135,10 +136,13 @@ public class CertificateServiceImpl implements CertificateService {
                 //生成缓存key
                 StringBuilder redisKey = new StringBuilder();
                 redisKey.append(CERTIFICATE_QUERY_SERVICE)
-                        .append(userId)
+                        .append("type")
                         .append(certificateType)
+                        .append("id")
+                        .append(userId)
+                        .append("index")
                         .append(pageIndex)
-                        .append("pageSize:")
+                        .append("size")
                         .append(pageSize);
                 //查询证书列表 先走redis缓存
                 List<Certificate> certificateList = null;
